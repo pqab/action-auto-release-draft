@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
+  "name": "action-auto-release-draft",
   "version": "0.0.0",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Drafts a GitHub release with the changes introduced by a newly created version tag",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -22,14 +22,14 @@
     "node",
     "setup"
   ],
-  "author": "YourNameOrOrganization",
+  "author": "pqab",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.23",
-    "@types/node": "^12.7.12",
+    "@types/node": "^12.12.28",
     "@typescript-eslint/parser": "^2.8.0",
     "@zeit/ncc": "^0.20.5",
     "eslint": "^5.16.0",
