@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/pqab/action-auto-release-draft.git"
   },
   "keywords": [
     "actions",
@@ -25,7 +25,9 @@
   "author": "pqab",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.0"
+    "@actions/core": "^1.2.0",
+    "@actions/github": "^2.1.1",
+    "@types/semver": "^7.1.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.23",
