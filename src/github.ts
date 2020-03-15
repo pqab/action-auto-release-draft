@@ -24,7 +24,7 @@ export async function createReleaseDraft(
     throw new Error(`Failed to create the release: ${response.status}`)
   }
 
-  core.info(`Created release draft '${response.data.name}`)
+  core.info(`Created release draft ${response.data.name}`)
 
   return response.data.html_url
 }

@@ -9,13 +9,12 @@ import {ExecOptions} from '@actions/exec/lib/interfaces'
  *
  * @param tag current tag
  */
-export async function getChangesIntroducedByTag(
-  tag: string
-): Promise<string | null> {
+export async function getChangesIntroducedByTag(tag: string): Promise<string> {
   const previousVersionTag = await getPreviousVersionTag(tag)
+
   return previousVersionTag
-    ? getCommitMessageBetween(previousVersionTag, tag)
-    : getCommitMessageFrom(tag)
+    ? getCommitMessagesBetween(previousVersionTag, tag)
+    : getCommitMessagesFrom(tag)
 }
 
 /**
@@ -41,12 +40,12 @@ export async function getPreviousVersionTag(
   const exitCode = await exec(
     'git',
     [
-      'describe',
-      '--match',
-      'v[0-9]*',
-      '--abbrev=0',
-      '--first-parent',
-      `${tag}^`
+      'describe', // Looks for tags
+      '--match', // Considers only tags that match a pattern
+      'v[0-9]*', // Matches only version tags
+      '--abbrev=0', // Prints only the tag name
+      '--first-parent', // Searches only the current branch
+      `${tag}^` // Starts looking from the parent of the specified tag
     ],
     options
   )
@@ -62,10 +61,10 @@ export async function getPreviousVersionTag(
  * @param firstTag commit message from tag
  * @param secondTag commit message to tag
  */
-export async function getCommitMessageBetween(
+export async function getCommitMessagesBetween(
   firstTag: string,
   secondTag: string
-): Promise<string | null> {
+): Promise<string> {
   let commitMessages = ''
 
   const options: ExecOptions = {
@@ -79,12 +78,16 @@ export async function getCommitMessageBetween(
 
   await exec(
     'git',
-    ['log', '--format=%s', `${firstTag}..${secondTag}^`],
+    [
+      'log', // Prints the commit history
+      '--format=%s', // Prints only the first line of the commit message (summary)
+      `${firstTag}..${secondTag}` // Includes the commits reachable from 'secondTag' but not 'firstTag'
+    ],
     options
   )
 
   core.debug(
-    `The commit messages between ${firstTag} and ${secondTag} are:\n${commitMessages.trim()}`
+    `The commit messages between ${firstTag} and ${secondTag} are:\n${commitMessages}`
   )
 
   return commitMessages.trim()
@@ -95,9 +98,7 @@ export async function getCommitMessageBetween(
  *
  * @param tag commit message from tag
  */
-export async function getCommitMessageFrom(
-  tag: string
-): Promise<string | null> {
+export async function getCommitMessagesFrom(tag: string): Promise<string> {
   let commitMessages = ''
 
   const options: ExecOptions = {
@@ -109,9 +110,17 @@ export async function getCommitMessageFrom(
     silent: true
   }
 
-  await exec('git', ['log', '--format=%s', tag], options)
+  await exec(
+    'git',
+    [
+      'log', // Prints the commit history
+      '--format=%s', // Prints only the first line of the commit message (summary)
+      tag // Includes the commits reachable from the specified tag
+    ],
+    options
+  )
 
-  core.debug(`The commit messages from ${tag} are:\n${commitMessages.trim()}`)
+  core.debug(`The commit messages from ${tag} are:\n${commitMessages}`)
 
   return commitMessages.trim()
 }
