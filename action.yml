@@ -1,6 +1,10 @@
 name: 'action-auto-release-draft'
 description: 'Drafts a GitHub release with the changes introduced by a newly created version tag'
 author: 'pqab'
+inputs:
+  repo-token:
+    description: 'The GITHUBB_TOKEN used to authenticate to the current repository'
+    required: true
 outputs:
   release-url:
     description: 'The URL of te GitHub release that was drafted'
