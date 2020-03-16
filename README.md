@@ -59,7 +59,7 @@ jobs:
     steps:
       - name: Create a release draft for a version tag
         id: create-release-draft
-        uses: pqab/auto-release-draft@v1
+        uses: pqab/action-auto-release-draft@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Print the URL of the release draft
